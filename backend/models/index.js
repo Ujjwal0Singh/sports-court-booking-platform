@@ -1,14 +1,6 @@
-const { Sequelize, DataTypes } = require('sequelize');
-
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite',
-  logging: false
-});
-
-
-const { Sequelize, DataTypes } = require('sequelize');
+// Import the configured sequelize instance from database config
 const sequelize = require('../config/database');
+const { DataTypes } = require('sequelize');
 
 // Court Model
 const Court = sequelize.define('Court', {
@@ -314,9 +306,11 @@ BookingEquipment.belongsTo(Equipment, { foreignKey: 'equipment_id' });
 const syncDatabase = async () => {
   try {
     await sequelize.sync({ force: false });
-    console.log('Database synchronized');
+    console.log('Database synchronized successfully');
+    return true;
   } catch (error) {
     console.error('Error syncing database:', error);
+    return false;
   }
 };
 

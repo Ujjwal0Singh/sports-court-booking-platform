@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "seed": "node seeders/seedData.js",
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "echo \"No tests specified\" && exit 0",
+    "prestart": "if [ \"$NODE_ENV\" = \"production\" ] && [ ! -f .seed-complete ]; then node seeders/seedData.js && touch .seed-complete; fi"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -18,7 +19,9 @@
     "helmet": "^7.1.0",
     "express-validator": "^7.0.1",
     "dotenv": "^16.3.1",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

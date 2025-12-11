@@ -9,40 +9,46 @@ const {
 
 const seedDatabase = async () => {
   try {
-    // Clearing existing data
-    await sequelize.sync({ force: true });
-    console.log('Database cleared');
+    console.log('Starting database seeding...');
+    
+    // Clear existing data (be careful in production!)
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync({ force: true });
+      console.log('Database cleared');
+    } else {
+      console.log('Production mode: Not clearing database');
+    }
 
-    // Creating courts
+    // Create courts
     const courts = await Court.bulkCreate([
       {
         name: 'Indoor Court 1',
         type: 'indoor',
         base_price: 15.00,
-        description: 'Premium indoor court with AC'
+        description: 'Premium indoor court with AC and professional flooring'
       },
       {
         name: 'Indoor Court 2',
         type: 'indoor',
         base_price: 15.00,
-        description: 'Premium indoor court with AC'
+        description: 'Premium indoor court with AC and professional lighting'
       },
       {
         name: 'Outdoor Court 1',
         type: 'outdoor',
         base_price: 10.00,
-        description: 'Outdoor court with floodlights'
+        description: 'Outdoor court with floodlights and synthetic turf'
       },
       {
         name: 'Outdoor Court 2',
         type: 'outdoor',
         base_price: 10.00,
-        description: 'Outdoor court with floodlights'
+        description: 'Outdoor court with floodlights and weather-resistant surface'
       }
     ]);
     console.log('Courts created');
 
-    // Creating equipment
+    // Create equipment
     const equipment = await Equipment.bulkCreate([
       {
         name: 'Professional Racket',
@@ -75,7 +81,7 @@ const seedDatabase = async () => {
     ]);
     console.log('Equipment created');
 
-    // Creating coaches
+    // Create coaches
     const coaches = await Coach.bulkCreate([
       {
         name: 'John Smith',
@@ -95,7 +101,7 @@ const seedDatabase = async () => {
     ]);
     console.log('Coaches created');
 
-    // Creating coach availability
+    // Create coach availability
     await CoachAvailability.bulkCreate([
       {
         coach_id: 1,
@@ -136,7 +142,7 @@ const seedDatabase = async () => {
     ]);
     console.log('Coach availability set');
 
-    // Creating pricing rules
+    // Create pricing rules
     await PricingRule.bulkCreate([
       {
         name: 'Peak Hours (6-9 PM)',
