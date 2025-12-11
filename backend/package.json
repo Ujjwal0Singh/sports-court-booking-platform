@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "seed": "node seeders/seedData.js",
     "test": "echo \"No tests specified\" && exit 0",
-    "prestart": "if [ \"$NODE_ENV\" = \"production\" ] && [ ! -f .seed-complete ]; then node seeders/seedData.js && touch .seed-complete; fi"
+    "prestart": "if [ \"$NODE_ENV\" = \"production\" ] && [ ! -f .seed-complete ]; then npx sequelize-cli db:migrate && node seeders/seedData.js && touch .seed-complete; fi"
   },
   "dependencies": {
     "express": "^4.18.2",
