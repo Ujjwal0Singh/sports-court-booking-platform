@@ -6,6 +6,10 @@ const sequelize = new Sequelize({
   logging: false
 });
 
+
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
 // Court Model
 const Court = sequelize.define('Court', {
   id: {
