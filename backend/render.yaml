@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: sports-court-booking-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sports-court-db
+          property: connectionString
+    autoDeploy: true
+
+databases:
+  - name: sports-court-db
+    databaseName: sports_court
+    plan: free

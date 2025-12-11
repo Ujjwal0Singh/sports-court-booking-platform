@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Use environment variable for API URL, fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
@@ -12,10 +13,16 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // For demo purposes, use a mock user ID
-    if (!config.headers['X-User-Id']) {
-      config.headers['X-User-Id'] = `user_${Date.now()}`;
+    // Get user ID from localStorage or generate one
+    let userId = localStorage.getItem('booking_user_id');
+    if (!userId) {
+      userId = `user_${Date.now()}`;
+      localStorage.setItem('booking_user_id', userId);
     }
+    
+    // Add user ID header for backend
+    config.headers['X-User-Id'] = userId;
+    
     return config;
   },
   (error) => {
@@ -39,7 +46,7 @@ export const bookingAPI = {
   getUserBookings: (userId) => api.get(`/bookings/user/${userId}`),
   cancelBooking: (bookingId) => api.put(`/bookings/${bookingId}/cancel`),
   addToWaitlist: (data) => api.post('/bookings/waitlist', data),
-  simulatePrice: (data) => api.post('/pricing/simulate', data), // Changed from /bookings/price/simulate
+  simulatePrice: (data) => api.post('/pricing/simulate', data),
 };
 
 export const courtAPI = {
@@ -71,25 +78,5 @@ export const adminAPI = {
   createPricingRule: (data) => api.post('/admin/pricing-rules', data),
   updatePricingRule: (id, data) => api.put(`/admin/pricing-rules/${id}`, data),
 };
-
-// Request interceptor
-api.interceptors.request.use(
-  (config) => {
-    // Get user ID from localStorage or generate one
-    let userId = localStorage.getItem('user_id');
-    if (!userId) {
-      userId = `user_${Date.now()}`;
-      localStorage.setItem('user_id', userId);
-    }
-    
-    // Add user ID header for backend
-    config.headers['X-User-Id'] = userId;
-    
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 export default api;
